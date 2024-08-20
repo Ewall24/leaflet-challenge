@@ -11,6 +11,18 @@ Instructions
 
     Get your dataset. To do so, follow these steps:
         The USGS provides earthquake data in a number of different formats, updated every 5 minutes. Visit the USGS GeoJSON Feed 
+###// Store our API endpoint as queryURL
+var queryURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+// Perform a GET request to the query URL
+d3.json(queryURL).then(function(data) {
+    // Once we get a response, send the data.features object to the createFeatures function.
+    createFeatures(data.features);
+});
+
+Function to create features from the earthquake data
+function createFeatures(earthquakeData) {
+
+
 
 Links to an external site. page and choose a dataset to visualize. The following image is an example screenshot of what appears when you visit this link:
 
@@ -23,7 +35,18 @@ When you click a dataset (such as "All Earthquakes from the Past 7 Days"), you w
 
 ![4-JSON](https://github.com/user-attachments/assets/ed76d417-5578-481b-b520-2e05b1c7b533)
 
-
+Create a GeoJSON layer containing the features array on the Earthquake Data object
+    function createCircleMarker(feature, latlng) {
+        let options = {
+            radius: feature.properties.mag * 5, // Adjust size based on magnitude
+            fillColor: chooseColor(feature.geometry.coordinates[2]), // Use depth to choose color
+            color: chooseColor(feature.geometry.coordinates[2]), // Use depth to choose color
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0.35
+        };
+        return L.circleMarker(latlng, options);
+    }
 
 ## Part 2 Import and visualize the data by doing the following:
 
@@ -37,6 +60,9 @@ When you click a dataset (such as "All Earthquakes from the Past 7 Days"), you w
 
 
         Your data markers should reflect the magnitude of the earthquake by their size and the depth of the earthquake by color. Earthquakes with higher magnitudes should appear larger, and earthquakes with greater depth should appear darker in color.
+
+
+
 
         
     Include popups that provide additional information about the earthquake when its associated marker is clicked.
